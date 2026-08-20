@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Generator nastavnih materijala — planovi, pripreme i obrasci za nastavnike</title>
+<meta name="description" content="Program za nastavnike u BiH. Unesete gradivo jednom — godišnji i sedmični planovi, mjesečni obrazac 16-B-1, dnevne pripreme, provjere znanja i prilagođeni programi nastaju iz njega. Radi bez interneta.">
+<meta property="og:title" content="Generator nastavnih materijala">
+<meta property="og:description" content="Papirologija za cijelu godinu — iz jednog unosa gradiva.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%230B1020'/><text y='68' x='50' text-anchor='middle' font-size='54' fill='%23E4C063'>%E2%9C%A6</text></svg>">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=DM+Sans:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --ink:#0B1020; --ink2:#111832; --ink3:#18203E;
+  --brass:#C79A3A; --brass-lt:#E4C063;
+  --paper:#F4F6FB; --paper2:#EBEFF7; --line:#DFE5F0;
+  --tx:#131A2B; --tx2:#55617D; --tx3:#8A94AC;
+  --good:#2FA37A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;color:var(--tx);background:var(--paper);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+a{color:inherit}
+
+/* ── Zaglavlje ── */
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(11,16,32,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.nav{display:flex;align-items:center;gap:14px;height:66px}
+.seal{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  background:radial-gradient(circle at 34% 28%,#1E2A49,#0A0E1C);
+  border:1.2px solid rgba(199,154,58,.6);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--brass-lt);font-size:14px;
+}
+.brand{font-family:'Fraunces',Georgia,serif;font-size:17px;font-weight:700;color:#F2F5FB;letter-spacing:-.01em}
+.brand span{
+  display:block;font-family:'DM Sans',sans-serif;font-size:8px;font-weight:600;
+  letter-spacing:.24em;text-transform:uppercase;color:rgba(199,154,58,.85);margin-top:1px;
+}
+.nav-links{margin-left:auto;display:flex;gap:26px;align-items:center}
+.nav-links a{
+  font-size:13.5px;font-weight:500;color:rgba(200,210,230,.72);
+  text-decoration:none;transition:color .16s;
+}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  padding:8px 15px;border-radius:9px;background:var(--brass);color:#12180A!important;
+  font-weight:700;font-size:13px;text-decoration:none;transition:filter .16s;
+}
+.nav-cta:hover{filter:brightness(1.1)}
+@media(max-width:720px){.nav-links a:not(.nav-cta){display:none}}
+
+/* ── Hero ── */
+.hero{
+  background:
+    radial-gradient(110% 70% at 80% 4%,rgba(199,154,58,.10) 0%,transparent 58%),
+    linear-gradient(170deg,#0A0E1C 0%,#111832 58%,#0A0E1C 100%);
+  color:var(--paper);padding:86px 0 96px;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.02) 0 1px,transparent 1px 32px);
+}
+.hero .wrap{position:relative}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;margin-bottom:24px;
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(199,154,58,.9);
+}
+.eyebrow::before{content:'';width:26px;height:1px;background:var(--brass)}
+h1{
+  font-family:'Fraunces',Georgia,serif;font-weight:700;
+  font-size:clamp(2.1rem,5.2vw,3.9rem);line-height:1.06;letter-spacing:-.028em;
+  color:#fff;max-width:15ch;
+}
+.hero p.lead{
+  font-size:clamp(1rem,1.6vw,1.22rem);color:#AEBBD4;font-weight:300;
+  max-width:48ch;margin-top:22px;line-height:1.65;
+}
+.btns{display:flex;gap:12px;margin-top:36px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:14px 24px;border-radius:11px;text-decoration:none;
+  font-size:14.5px;font-weight:700;transition:all .17s;border:1px solid transparent;
+}
+.btn-p{background:linear-gradient(135deg,var(--brass),#A67C2E);color:#12180A;box-shadow:0 8px 26px rgba(199,154,58,.24)}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(199,154,58,.32)}
+.btn-s{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16);color:#E6ECF7}
+.btn-s:hover{background:rgba(255,255,255,.12);transform:translateY(-2px)}
+.hero-note{
+  margin-top:26px;font-family:'IBM Plex Mono',monospace;
+  font-size:11px;color:rgba(140,155,185,.6);letter-spacing:.04em;
+}
+
+/* ── Traka brojeva ── */
+.strip{background:var(--ink3);color:#C9D4E8;padding:26px 0;border-top:1px solid rgba(255,255,255,.06)}
+.strip-in{display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.st{flex:1;min-width:130px}
+.st em{
+  display:block;font-family:'Fraunces',serif;font-style:normal;font-weight:700;
+  font-size:1.75rem;color:var(--brass-lt);line-height:1;
+}
+.st span{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:rgba(160,175,205,.7);margin-top:8px;
+}
+
+/* ── Sekcije ── */
+section{padding:80px 0}
+.sec-lbl{
+  display:flex;align-items:center;gap:14px;margin-bottom:14px;
+}
+.sec-no{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
+  letter-spacing:.12em;color:#0D1223;background:var(--brass);padding:4px 8px;border-radius:4px;
+}
+.sec-tx{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;color:#9A7420;
+}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(199,154,58,.4),transparent)}
+h2{
+  font-family:'Fraunces',Georgia,serif;font-weight:700;
+  font-size:clamp(1.6rem,3.2vw,2.5rem);line-height:1.14;letter-spacing:-.022em;
+  color:var(--tx);max-width:20ch;
+}
+.sec-lead{font-size:1.02rem;color:var(--tx2);max-width:56ch;margin-top:16px;font-weight:300}
+
+/* ── Kartice mogućnosti ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px;margin-top:38px}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px 22px;
+  transition:transform .18s,border-color .18s,box-shadow .18s;
+}
+.card:hover{transform:translateY(-3px);border-color:rgba(199,154,58,.45);box-shadow:0 12px 30px rgba(19,26,43,.08)}
+.card-ico{
+  width:38px;height:38px;border-radius:11px;margin-bottom:15px;
+  background:linear-gradient(135deg,var(--ink2),var(--ink3));
+  display:flex;align-items:center;justify-content:center;
+}
+.card-ico svg{stroke:var(--brass-lt);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.card h3{font-size:1.02rem;font-weight:700;letter-spacing:-.01em;margin-bottom:7px}
+.card p{font-size:.9rem;color:var(--tx2);line-height:1.6;font-weight:300}
+.card ul{list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.card li{font-size:.84rem;color:var(--tx2);padding-left:16px;position:relative;font-weight:400}
+.card li::before{content:'—';position:absolute;left:0;color:var(--brass);font-weight:700}
+
+/* ── Obrasci ── */
+.forms{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.form-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:0;margin-top:34px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.form-item{padding:17px 20px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.form-item b{display:block;font-size:.94rem;font-weight:700;margin-bottom:3px}
+.form-item span{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--tx3);letter-spacing:.06em}
+
+/* ── Uloge ── */
+.roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:36px}
+.role{border-left:2px solid var(--brass);padding:4px 0 4px 18px}
+.role b{display:block;font-family:'Fraunces',serif;font-size:1.15rem;font-weight:700;margin-bottom:6px}
+.role p{font-size:.9rem;color:var(--tx2);font-weight:300;line-height:1.62}
+
+/* ── Preuzimanje ── */
+.dl{
+  background:linear-gradient(168deg,#0A0E1C,#131B36);color:var(--paper);
+  border-radius:20px;padding:clamp(30px,5vw,52px);margin:0 auto;
+  position:relative;overflow:hidden;
+}
+.dl::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.02) 0 1px,transparent 1px 30px);
+}
+.dl-in{position:relative;display:flex;gap:36px;align-items:center;flex-wrap:wrap}
+.dl-l{flex:1;min-width:270px}
+.dl h2{color:#fff;max-width:18ch}
+.dl p{color:#A9B6D0;margin-top:14px;font-weight:300;max-width:44ch}
+.dl-r{flex:0 0 auto;display:flex;flex-direction:column;gap:10px;min-width:210px}
+.req{
+  margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.09);
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(150,165,195,.65);
+  letter-spacing:.04em;line-height:1.9;
+}
+
+/* ── Podnožje ── */
+footer{background:var(--ink);color:#8C9AB8;padding:44px 0;font-size:.87rem}
+.foot{display:flex;gap:24px;justify-content:space-between;flex-wrap:wrap;align-items:flex-start}
+.foot b{color:#E6ECF7;display:block;margin-bottom:5px;font-size:.94rem}
+.foot p{font-weight:300;line-height:1.7}
+.foot-r{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:rgba(140,155,185,.55)}
+@media(max-width:640px){.foot-r{text-align:left}}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="seal">✦</div>
+    <div class="brand">Generator<span>nastavnih materijala</span></div>
+    <nav class="nav-links">
+      <a href="#mogucnosti">Mogućnosti</a>
+      <a href="#obrasci">Obrasci</a>
+      <a href="#skola">Za školu</a>
+      <a class="nav-cta" href="#preuzmi">Preuzmi</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Za nastavnike u Bosni i Hercegovini</div>
+    <h1>Papirologija za cijelu godinu — iz jednog unosa gradiva.</h1>
+    <p class="lead">
+      Unesete nastavne jedinice jednom. Godišnji i sedmični planovi, mjesečni obrasci,
+      dnevne pripreme, provjere znanja i prilagođeni programi nastaju iz njih.
+    </p>
+    <div class="btns">
+      <a class="btn btn-p" href="#preuzmi">Preuzmi program</a>
+      <a class="btn btn-s" href="prezentacija.html">Pogledaj prezentaciju</a>
+    </div>
+    <div class="hero-note">Windows · radi bez interneta · bez naloga i pretplate</div>
+  </div>
+</div>
+
+<div class="strip">
+  <div class="wrap strip-in">
+    <div class="st"><em>9</em><span>vrsta dokumenata</span></div>
+    <div class="st"><em>2</em><span>smjene u rasporedu</span></div>
+    <div class="st"><em>36</em><span>sedmica godišnje</span></div>
+    <div class="st"><em>0 KM</em><span>za AI, uz besplatan ključ</span></div>
+  </div>
+</div>
+
+<section id="mogucnosti">
+  <div class="wrap">
+    <div class="sec-lbl"><span class="sec-no">01</span><span class="sec-tx">Mogućnosti</span><span class="sec-line"></span></div>
+    <h2>Šta program radi</h2>
+    <p class="sec-lead">Podijeljen je onako kako nastavnik i radi — od planiranja na početku godine do provjere znanja u učionici.</p>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-ico"><svg width="19" height="19" viewBox="0 0 24 24"><path d="M4 19.2A2.5 2.5 0 0 1 6.5 16.7H20"/><path d="M6.5 2.5H20v19H6.5A2.5 2.5 0 0 1 4 19V5a2.5 2.5 0 0 1 2.5-2.5z"/></svg></div>
+        <h3>Planiranje</h3>
+        <p>Unesete nastavne jedinice, a planovi se prave sami.</p>
+        <ul>
+          <li>Godišnji plan rada</li>
+          <li>Sedmični planovi za svaku sedmicu</li>
+          <li>Mjesečni obrazac 16-B-1 po odjeljenjima</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-ico"><svg width="19" height="19" viewBox="0 0 24 24"><path d="M3.5 3.5h7v7h-7z"/><path d="M13.5 3.5h7v7h-7z"/><path d="M3.5 13.5h7v7h-7z"/><path d="M13.5 13.5h7v7h-7z"/></svg></div>
+        <h3>Organizacija</h3>
+        <p>Program sam računa koliko časova ima u mjesecu.</p>
+        <ul>
+          <li>Raspored za obje smjene i grupe</li>
+          <li>Vremena zvonjenja</li>
+          <li>Praznici i raspusti u kalendaru</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-ico"><svg width="19" height="19" viewBox="0 0 24 24"><path d="M6.5 6.5h11v11h-11z"/><path d="M9.5 9.5h5v5h-5z"/><path d="M9 2.5v4M15 2.5v4M9 17.5v4M15 17.5v4"/><path d="M2.5 9h4M2.5 15h4M17.5 9h4M17.5 15h4"/></svg></div>
+        <h3>Dnevne pripreme</h3>
+        <p>Izaberete jedinicu — dobijete gotovu pripremu.</p>
+        <ul>
+          <li>Ciljevi, ishodi i tok časa</li>
+          <li>Metode i oblici rada</li>
+          <li>Uredite je kako želite</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-ico"><svg width="19" height="19" viewBox="0 0 24 24"><path d="M9 3.5h6a1 1 0 0 1 1 1v1.4a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z"/><path d="M16 5.2h2.4a1.6 1.6 0 0 1 1.6 1.6v13.1a1.6 1.6 0 0 1-1.6 1.6H5.6A1.6 1.6 0 0 1 4 19.9V6.8a1.6 1.6 0 0 1 1.6-1.6H8"/><path d="M8.8 13.4l2.1 2.1 4.3-4.3"/></svg></div>
+        <h3>Provjere znanja</h3>
+        <p>Zadaci po nivoima, sa skalom po Pravilniku.</p>
+        <ul>
+          <li>Pismena i kratka provjera</li>
+          <li>Ključ za ispravljanje zasebno</li>
+          <li>Nova kombinacija svaki put</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-ico"><svg width="19" height="19" viewBox="0 0 24 24"><path d="M3.5 20.5h17"/><path d="M6.8 20.5v-7.2"/><path d="M12 20.5V6.5"/><path d="M17.2 20.5v-4.6"/></svg></div>
+        <h3>Kviz u kabinetu</h3>
+        <p>Učenici rješavaju na računarima, rezultati stižu odmah.</p>
+        <ul>
+          <li>Zaokruži, dopuni, poveži, T/N</li>
+          <li>Automatsko bodovanje i ocjena</li>
+          <li>Izvještaj za dosije u Wordu</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-ico"><svg width="19" height="19" viewBox="0 0 24 24"><path d="M9.5 3.5h5v2.2a1.8 1.8 0 1 0 3.6 0V3.5h2.4v5h-2.2a1.8 1.8 0 1 0 0 3.6h2.2v8.4h-8.4v-2.2a1.8 1.8 0 1 0-3.6 0v2.2H3.5V12h2.2a1.8 1.8 0 1 0 0-3.6H3.5V3.5h6z"/></svg></div>
+        <h3>Prilagođeni programi</h3>
+        <p>Za učenike s teškoćama u razvoju — po obrascu.</p>
+        <ul>
+          <li>Opservacija na početku godine</li>
+          <li>Obrazac 15-A za svaka dva mjeseca</li>
+          <li>Polugodišnji izvještaj sam objedini periode</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="forms" id="obrasci">
+  <div class="wrap">
+    <div class="sec-lbl"><span class="sec-no">02</span><span class="sec-tx">Dokumenti</span><span class="sec-line"></span></div>
+    <h2>Šta dobijete u Wordu</h2>
+    <p class="sec-lead">Sve spremno za štampu i predaju — bez naknadnog dotjerivanja.</p>
+
+    <div class="form-list">
+      <div class="form-item"><b>Godišnji plan rada</b><span>po nastavnim jedinicama</span></div>
+      <div class="form-item"><b>Sedmični plan</b><span>za svaku sedmicu</span></div>
+      <div class="form-item"><b>Mjesečni plan</b><span>Obrazac 16-B-1</span></div>
+      <div class="form-item"><b>Dnevna priprema</b><span>za svaki čas</span></div>
+      <div class="form-item"><b>Pismena provjera + ključ</b><span>po nivoima znanja</span></div>
+      <div class="form-item"><b>Inicijalna provjera</b><span>kviz i analiza po razredu</span></div>
+      <div class="form-item"><b>Prilagođeni program</b><span>Obrazac 15-A · 4 strane</span></div>
+      <div class="form-item"><b>Opservacija učenika</b><span>13 područja praćenja</span></div>
+      <div class="form-item"><b>Polugodišnji izvještaj</b><span>rekapitulacija realizacija</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="skola">
+  <div class="wrap">
+    <div class="sec-lbl"><span class="sec-no">03</span><span class="sec-tx">Za cijelu školu</span><span class="sec-line"></span></div>
+    <h2>Svako vidi ono što mu treba</h2>
+    <p class="sec-lead">Jedna instalacija, više korisnika. Svaki nastavnik ima svoj profil, svoje planove i svoj AI ključ.</p>
+
+    <div class="roles">
+      <div class="role">
+        <b>Nastavnik</b>
+        <p>Vidi samo svoje planove i pripreme. Svoja lozinka, svoj AI ključ, svoji predmeti i razredi.</p>
+      </div>
+      <div class="role">
+        <b>Pedagog</b>
+        <p>Pregled realizacije po nastavnicima i analize inicijalnih provjera. Bez pristupa tuđim planovima.</p>
+      </div>
+      <div class="role">
+        <b>Administrator</b>
+        <p>Upravlja profilima, ulogama i lozinkama. Može vratiti zaboravljenu lozinku na podrazumijevanu.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="preuzmi">
+  <div class="wrap">
+    <div class="dl">
+      <div class="dl-in">
+        <div class="dl-l">
+          <h2>Preuzmite i instalirajte</h2>
+          <p>Instalira se kao običan program. Bez naloga, bez pretplate, bez slanja podataka na strane servere — sve ostaje na vašem računaru.</p>
+          <div class="req">
+            WINDOWS 10 ILI 11 · 64-BITNI<br>
+            500 MB SLOBODNOG PROSTORA<br>
+            INTERNET SAMO ZA AI FUNKCIJE
+          </div>
+        </div>
+        <div class="dl-r">
+          <!-- Zamijenite # stvarnom adresom fajla nakon objave -->
+          <a class="btn btn-p" href="#" style="justify-content:center">Instalacija za Windows</a>
+          <a class="btn btn-s" href="Uputstvo_za_instalaciju.docx" style="justify-content:center">Uputstvo (Word)</a>
+          <a class="btn btn-s" href="prezentacija.html" style="justify-content:center">Prezentacija</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <b>Jasmin Suljkanović</b>
+      <p>Nastavnik informatike · JU OŠ „Rainci Gornji", Kalesija<br>
+      Predsjednik UPINITK — Udruženja nastavnika informatike TK</p>
+    </div>
+    <div class="foot-r">
+      GENERATOR NASTAVNIH MATERIJALA<br>
+      VERZIJA 11.0
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

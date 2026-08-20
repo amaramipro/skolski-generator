@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Generator nastavnih materijala — prezentacija</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=DM+Sans:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --ink:#0B1020; --ink2:#111832; --ink3:#18203E;
+  --brass:#C79A3A; --brass-lt:#E4C063;
+  --paper:#F2F5FB; --muted:#7C8AA8; --good:#3FB998;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--ink);overflow:hidden}
+body{
+  font-family:'DM Sans',system-ui,sans-serif;color:var(--paper);
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ── Scenska ploča: 16:9, skalira se na bilo koji ekran ── */
+#stage{
+  position:relative;width:100vw;height:100vh;
+  max-width:177.78vh;max-height:56.25vw;
+  overflow:hidden;
+  background:
+    radial-gradient(120% 80% at 78% 6%, rgba(199,154,58,.09) 0%, transparent 58%),
+    linear-gradient(168deg,#0A0E1C 0%,#111832 55%,#0A0E1C 100%);
+}
+/* jedva vidljive linije papira */
+#stage::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.02) 0 1px,transparent 1px 34px);
+}
+
+.scene{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:0 7.5%;
+  opacity:0;visibility:hidden;
+  transition:opacity .55s ease, visibility .55s;
+}
+.scene.on{opacity:1;visibility:visible}
+
+/* ── Rubrika: oznaka + broj, kao na obrascu ── */
+.rub{
+  display:flex;align-items:center;gap:14px;margin-bottom:26px;
+  opacity:0;transform:translateY(10px);
+}
+.scene.on .rub{animation:up .6s cubic-bezier(.16,1,.3,1) .12s forwards}
+.rub-no{
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;font-weight:600;
+  letter-spacing:.14em;color:#0D1223;background:var(--brass);
+  padding:5px 9px;border-radius:4px;
+}
+.rub-tx{
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;font-weight:500;
+  letter-spacing:.26em;text-transform:uppercase;color:rgba(199,154,58,.85);
+}
+.rub-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(199,154,58,.45),transparent)}
+
+h1{
+  font-family:'Fraunces',Georgia,serif;font-weight:700;
+  font-size:clamp(2rem,4.6vw,4.1rem);line-height:1.04;letter-spacing:-.025em;
+  color:#fff;max-width:16ch;
+  opacity:0;transform:translateY(16px);
+}
+.scene.on h1{animation:up .7s cubic-bezier(.16,1,.3,1) .22s forwards}
+
+.lead{
+  font-size:clamp(.95rem,1.45vw,1.28rem);line-height:1.62;color:#AEBBD4;
+  max-width:44ch;margin-top:20px;font-weight:300;
+  opacity:0;transform:translateY(14px);
+}
+.scene.on .lead{animation:up .7s cubic-bezier(.16,1,.3,1) .34s forwards}
+
+.row{display:flex;gap:5%;align-items:center}
+.col-l{flex:1 1 46%;min-width:0}
+.col-r{flex:1 1 49%;min-width:0}
+
+/* stavke */
+.bul{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:13px}
+.bul li{
+  display:flex;gap:13px;align-items:flex-start;
+  font-size:clamp(.85rem,1.15vw,1.02rem);color:#C4CFE4;font-weight:400;
+  opacity:0;transform:translateX(-12px);
+}
+.scene.on .bul li{animation:sideIn .55s cubic-bezier(.16,1,.3,1) forwards}
+.scene.on .bul li:nth-child(1){animation-delay:.46s}
+.scene.on .bul li:nth-child(2){animation-delay:.58s}
+.scene.on .bul li:nth-child(3){animation-delay:.70s}
+.scene.on .bul li:nth-child(4){animation-delay:.82s}
+.tick{color:var(--brass);flex-shrink:0;font-weight:700;line-height:1.5}
+
+/* ── Prikaz programa (apstrakcija, ne lažni snimak) ── */
+.app{
+  border-radius:14px;overflow:hidden;background:#0E1526;
+  border:1px solid rgba(255,255,255,.09);
+  box-shadow:0 34px 80px rgba(0,0,0,.5);
+  display:flex;height:clamp(210px,26vw,360px);
+  opacity:0;transform:translateY(20px) scale(.975);
+}
+.scene.on .app{animation:up .8s cubic-bezier(.16,1,.3,1) .4s forwards}
+.app-side{width:31%;background:linear-gradient(178deg,#0B1020,#131B36);padding:14px 12px;border-right:1px solid rgba(255,255,255,.06)}
+.app-brand{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.app-seal{width:19px;height:19px;border-radius:50%;border:1.2px solid rgba(199,154,58,.6);display:flex;align-items:center;justify-content:center;color:var(--brass-lt);font-size:9px}
+.app-bname{font-family:'Fraunces',serif;font-size:11px;color:#EDF1F9;font-weight:700}
+.app-grp{font-family:'IBM Plex Mono',monospace;font-size:6.5px;letter-spacing:.16em;color:#5C6A88;margin:11px 0 5px;text-transform:uppercase}
+.app-it{display:flex;align-items:center;gap:7px;padding:4.5px 7px;border-radius:6px;margin-bottom:2px}
+.app-it i{width:9px;height:9px;border-radius:2.5px;background:rgba(255,255,255,.16);flex-shrink:0}
+.app-it b{height:5px;border-radius:3px;background:rgba(255,255,255,.15);flex:1;max-width:74%}
+.app-it.act{background:linear-gradient(100deg,rgba(199,154,58,.2),rgba(199,154,58,.05));position:relative}
+.app-it.act i{background:var(--brass)}
+.app-it.act b{background:rgba(255,255,255,.55)}
+.app-it.act::before{content:'';position:absolute;left:-12px;top:50%;transform:translateY(-50%);width:2.5px;height:15px;border-radius:0 2px 2px 0;background:var(--brass);box-shadow:0 0 8px rgba(199,154,58,.8)}
+.app-main{flex:1;background:#F5F7FC;padding:13px 15px}
+.app-top{display:flex;justify-content:space-between;align-items:center;padding-bottom:9px;border-bottom:1px solid #E3E8F2;margin-bottom:11px}
+.app-ttl{height:8px;width:44%;border-radius:4px;background:#1B2440}
+.app-btns{display:flex;gap:5px}
+.app-btns u{width:22px;height:9px;border-radius:3px;background:#DDE4F0;display:block}
+.app-btns u.p{background:#1B2440;width:30px}
+.app-card{background:#fff;border:1px solid #E6EBF4;border-radius:8px;padding:9px;margin-bottom:7px}
+.app-ln{height:5px;border-radius:3px;background:#DFE5F1;margin-bottom:5px}
+.app-ln.s{width:58%}.app-ln.m{width:80%}.app-ln.g{background:#C79A3A;opacity:.55;width:34%}
+.app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.app-kpi{background:#fff;border:1px solid #E6EBF4;border-radius:7px;padding:8px}
+.app-kpi em{display:block;font-family:'Fraunces',serif;font-style:normal;font-size:15px;font-weight:700;color:#131A2B}
+.app-kpi span{display:block;height:4px;border-radius:2px;background:#DFE5F1;margin-top:5px}
+
+/* ── Uvodna scena: gomila obrazaca ── */
+.pile{display:flex;flex-direction:column;gap:9px;align-items:flex-start}
+.pile div{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(.72rem,1.15vw,1rem);color:#8595B3;
+  border-left:2px solid rgba(199,154,58,.4);padding-left:13px;
+  opacity:0;transform:translateX(-14px);
+}
+.scene.on .pile div{animation:sideIn .34s ease-out forwards}
+.hit{
+  font-family:'Fraunces',serif;font-size:clamp(1.5rem,3.3vw,2.9rem);
+  font-weight:700;color:#fff;margin-top:34px;letter-spacing:-.02em;
+  opacity:0;transform:translateY(14px);
+}
+.scene.on .hit{animation:up .7s cubic-bezier(.16,1,.3,1) 2.5s forwards}
+.hit b{color:var(--brass);font-weight:700}
+
+/* ── Logo scena ── */
+.logo-wrap{display:flex;flex-direction:column;align-items:center;text-align:center;justify-content:center;height:100%}
+.seal{
+  width:clamp(64px,7.6vw,104px);height:clamp(64px,7.6vw,104px);border-radius:50%;
+  background:radial-gradient(circle at 34% 28%,#1E2A49,#0A0E1C);
+  border:1.6px solid rgba(199,154,58,.6);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--brass-lt);font-size:clamp(26px,3vw,42px);
+  box-shadow:inset 0 0 26px rgba(199,154,58,.14),0 18px 50px rgba(0,0,0,.5);
+  opacity:0;transform:scale(.75) rotate(-8deg);
+}
+.scene.on .seal{animation:stamp .85s cubic-bezier(.34,1.56,.64,1) .1s forwards}
+.seal::after{content:'';position:absolute;width:clamp(52px,6.2vw,84px);height:clamp(52px,6.2vw,84px);border:1px dashed rgba(199,154,58,.34);border-radius:50%}
+.big{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(2rem,5.4vw,4.6rem);letter-spacing:-.03em;color:#fff;
+  margin-top:26px;opacity:0;transform:translateY(16px);
+}
+.scene.on .big{animation:up .7s cubic-bezier(.16,1,.3,1) .55s forwards}
+.sub{
+  font-family:'DM Sans',sans-serif;font-size:clamp(.7rem,1.05vw,.95rem);
+  font-weight:600;letter-spacing:.34em;text-transform:uppercase;
+  color:rgba(199,154,58,.9);margin-top:14px;
+  opacity:0;transform:translateY(12px);
+}
+.scene.on .sub{animation:up .7s cubic-bezier(.16,1,.3,1) .72s forwards}
+.tag{
+  font-size:clamp(.9rem,1.35vw,1.2rem);color:#A9B6D0;margin-top:30px;font-weight:300;
+  max-width:40ch;line-height:1.6;
+  opacity:0;transform:translateY(12px);
+}
+.scene.on .tag{animation:up .7s cubic-bezier(.16,1,.3,1) .9s forwards}
+
+/* ── Brojevi ── */
+.stats{display:flex;gap:clamp(20px,3.6vw,58px);margin-top:34px;flex-wrap:wrap}
+.stat{opacity:0;transform:translateY(14px)}
+.scene.on .stat{animation:up .6s cubic-bezier(.16,1,.3,1) forwards}
+.scene.on .stat:nth-child(1){animation-delay:.44s}
+.scene.on .stat:nth-child(2){animation-delay:.56s}
+.scene.on .stat:nth-child(3){animation-delay:.68s}
+.stat em{
+  display:block;font-family:'Fraunces',serif;font-style:normal;font-weight:700;
+  font-size:clamp(1.8rem,3.6vw,3.2rem);color:var(--brass-lt);line-height:1;letter-spacing:-.02em;
+}
+.stat span{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:.68rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:9px;
+}
+
+/* ── Trake / kontrole ── */
+#bar{position:absolute;left:0;bottom:0;height:2.5px;background:var(--brass);width:0;box-shadow:0 0 10px rgba(199,154,58,.7);z-index:9}
+#num{
+  position:absolute;right:2.6%;bottom:3.4%;
+  font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.16em;
+  color:rgba(140,155,185,.5);z-index:9;
+}
+#hint{
+  position:absolute;left:2.6%;bottom:3.4%;
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.1em;
+  color:rgba(140,155,185,.34);z-index:9;transition:opacity .4s;
+}
+#hint.hide{opacity:0}
+#pause{
+  position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+  background:rgba(6,9,20,.55);backdrop-filter:blur(3px);z-index:20;
+  font-family:'IBM Plex Mono',monospace;letter-spacing:.24em;font-size:.8rem;color:#fff;
+}
+#pause.on{display:flex}
+
+@keyframes up{to{opacity:1;transform:translateY(0)}}
+@keyframes sideIn{to{opacity:1;transform:translateX(0)}}
+@keyframes stamp{
+  0%{opacity:0;transform:scale(1.5) rotate(-10deg)}
+  60%{opacity:1;transform:scale(.92) rotate(2deg)}
+  100%{opacity:1;transform:scale(1) rotate(0)}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .scene.on *{opacity:1!important;transform:none!important}
+}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- 1 · Uvod: gomila obrazaca -->
+  <section class="scene" data-t="9500">
+    <div class="rub"><span class="rub-no">01</span><span class="rub-tx">Svaka školska godina</span><span class="rub-line"></span></div>
+    <div class="pile" id="pile"></div>
+    <div class="hit">Sve to. Ručno. <b>Svake godine.</b></div>
+  </section>
+
+  <!-- 2 · Logo -->
+  <section class="scene" data-t="6000">
+    <div class="logo-wrap">
+      <div class="seal">✦</div>
+      <div class="big">Generator</div>
+      <div class="sub">nastavnih materijala</div>
+      <div class="tag">Jedan unos gradiva. Svi planovi, pripreme i obrasci iz njega.</div>
+    </div>
+  </section>
+
+  <!-- 3 · Planiranje -->
+  <section class="scene" data-t="12000">
+    <div class="rub"><span class="rub-no">02</span><span class="rub-tx">Planiranje</span><span class="rub-line"></span></div>
+    <div class="row">
+      <div class="col-l">
+        <h1>Unesete jednom. Koristite cijelu godinu.</h1>
+        <ul class="bul">
+          <li><span class="tick">—</span> Godišnji plan po nastavnim jedinicama</li>
+          <li><span class="tick">—</span> Sedmični planovi za svaku sedmicu</li>
+          <li><span class="tick">—</span> Mjesečni obrazac 16-B-1, po odjeljenjima</li>
+          <li><span class="tick">—</span> Sve odmah spremno u Wordu</li>
+        </ul>
+      </div>
+      <div class="col-r">
+        <div class="app">
+          <div class="app-side">
+            <div class="app-brand"><div class="app-seal">✦</div><div class="app-bname">Generator</div></div>
+            <div class="app-grp">Planiranje</div>
+            <div class="app-it act"><i></i><b></b></div>
+            <div class="app-it"><i></i><b style="max-width:62%"></b></div>
+            <div class="app-it"><i></i><b style="max-width:70%"></b></div>
+            <div class="app-grp">Organizacija</div>
+            <div class="app-it"><i></i><b style="max-width:66%"></b></div>
+            <div class="app-it"><i></i><b style="max-width:52%"></b></div>
+          </div>
+          <div class="app-main">
+            <div class="app-top"><div class="app-ttl"></div><div class="app-btns"><u></u><u class="p"></u></div></div>
+            <div class="app-card"><div class="app-ln g"></div><div class="app-ln m"></div><div class="app-ln s"></div></div>
+            <div class="app-card"><div class="app-ln g" style="width:28%"></div><div class="app-ln m"></div><div class="app-ln s"></div></div>
+            <div class="app-card"><div class="app-ln g" style="width:40%"></div><div class="app-ln m"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · Raspored -->
+  <section class="scene" data-t="10500">
+    <div class="rub"><span class="rub-no">03</span><span class="rub-tx">Organizacija</span><span class="rub-line"></span></div>
+    <h1>Raspored, zvonjenje i kalendar — na jednom mjestu.</h1>
+    <p class="lead">Dvije smjene, podjela na grupe, praznici i raspusti. Program sam računa koliko časova ima u mjesecu i raspoređuje jedinice po sedmicama.</p>
+    <div class="stats">
+      <div class="stat"><em>2</em><span>smjene</span></div>
+      <div class="stat"><em>9</em><span>razreda</span></div>
+      <div class="stat"><em>36</em><span>sedmica</span></div>
+    </div>
+  </section>
+
+  <!-- 5 · Pripreme -->
+  <section class="scene" data-t="11500">
+    <div class="rub"><span class="rub-no">04</span><span class="rub-tx">Nastava</span><span class="rub-line"></span></div>
+    <div class="row">
+      <div class="col-l">
+        <h1>Dnevna priprema za nekoliko sekundi.</h1>
+        <p class="lead">Izaberete nastavnu jedinicu — dobijete pripremu s ciljevima, ishodima, tokom časa i metodama. Uređujete je kako želite.</p>
+      </div>
+      <div class="col-r">
+        <div class="app">
+          <div class="app-side">
+            <div class="app-brand"><div class="app-seal">✦</div><div class="app-bname">Generator</div></div>
+            <div class="app-grp">Nastava</div>
+            <div class="app-it act"><i></i><b></b></div>
+            <div class="app-it"><i></i><b style="max-width:58%"></b></div>
+            <div class="app-it"><i></i><b style="max-width:68%"></b></div>
+          </div>
+          <div class="app-main">
+            <div class="app-top"><div class="app-ttl" style="width:56%"></div><div class="app-btns"><u class="p"></u></div></div>
+            <div class="app-card"><div class="app-ln g" style="width:46%"></div><div class="app-ln m"></div><div class="app-ln m" style="width:92%"></div><div class="app-ln s"></div></div>
+            <div class="app-card"><div class="app-ln m"></div><div class="app-ln s" style="width:70%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · Provjere -->
+  <section class="scene" data-t="12000">
+    <div class="rub"><span class="rub-no">05</span><span class="rub-tx">Provjere znanja</span><span class="rub-line"></span></div>
+    <h1>Pismena, kratka provjera, kviz ili skripta.</h1>
+    <p class="lead">Zadaci po nivoima znanja, skala ocjenjivanja po Pravilniku i ključ za ispravljanje. Zaokruživanje, tačno/netačno, dopuni, poveži i kratki odgovor.</p>
+    <ul class="bul">
+      <li><span class="tick">—</span> Test i ključ zasebno, spremni za štampu</li>
+      <li><span class="tick">—</span> Svaki put nova kombinacija pitanja</li>
+    </ul>
+  </section>
+
+  <!-- 7 · Kviz uživo -->
+  <section class="scene" data-t="13500">
+    <div class="rub"><span class="rub-no">06</span><span class="rub-tx">Kviz u kabinetu</span><span class="rub-line"></span></div>
+    <div class="row">
+      <div class="col-l">
+        <h1>Učenici rješavaju. Vi gledate rezultate uživo.</h1>
+        <p class="lead">Kviz se otvori na računarima u kabinetu. Čim učenik preda, rezultat stiže na vaš računar — s bodovima, postotkom i ocjenom po Pravilniku.</p>
+      </div>
+      <div class="col-r">
+        <div class="app">
+          <div class="app-side">
+            <div class="app-brand"><div class="app-seal">✦</div><div class="app-bname">Rezultati</div></div>
+            <div class="app-grp">Uživo</div>
+            <div class="app-it act"><i style="background:#3FB998"></i><b></b></div>
+            <div class="app-it"><i style="background:#3FB998"></i><b style="max-width:64%"></b></div>
+            <div class="app-it"><i style="background:#3FB998"></i><b style="max-width:72%"></b></div>
+            <div class="app-it"><i></i><b style="max-width:50%"></b></div>
+          </div>
+          <div class="app-main">
+            <div class="app-top"><div class="app-ttl" style="width:38%"></div><div class="app-btns"><u></u><u class="p"></u></div></div>
+            <div class="app-grid">
+              <div class="app-kpi"><em>24</em><span></span></div>
+              <div class="app-kpi"><em>78%</em><span></span></div>
+              <div class="app-kpi"><em>4</em><span></span></div>
+              <div class="app-kpi"><em>18</em><span></span></div>
+            </div>
+            <div class="app-card" style="margin-top:7px"><div class="app-ln m"></div><div class="app-ln s"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · Prilagođeni -->
+  <section class="scene" data-t="12500">
+    <div class="rub"><span class="rub-no">07</span><span class="rub-tx">Učenici s teškoćama</span><span class="rub-line"></span></div>
+    <h1>Kompletan prilagođeni program — tačno po obrascu.</h1>
+    <p class="lead">Opservacija na početku godine, Obrazac 15-A za svaka dva mjeseca i polugodišnji izvještaj koji sam objedini sve realizovane periode.</p>
+    <ul class="bul">
+      <li><span class="tick">—</span> Četiri strane, margine 2 cm, tačne orijentacije</li>
+      <li><span class="tick">—</span> Plan s praznom rubrikom, realizacija s popunjenom</li>
+      <li><span class="tick">—</span> Opservacija se piše jednom, koristi cijelu godinu</li>
+    </ul>
+  </section>
+
+  <!-- 9 · Škola -->
+  <section class="scene" data-t="11500">
+    <div class="rub"><span class="rub-no">08</span><span class="rub-tx">Cijela škola</span><span class="rub-line"></span></div>
+    <h1>Svaki nastavnik svoj profil. Pedagog svoj pregled.</h1>
+    <p class="lead">Nastavnik vidi samo svoje planove. Pedagog dobija pregled realizacije i analize inicijalnih provjera po nastavnicima. Administrator upravlja profilima i lozinkama.</p>
+    <div class="stats">
+      <div class="stat"><em>3</em><span>uloge</span></div>
+      <div class="stat"><em>∞</em><span>nastavnika</span></div>
+      <div class="stat"><em>1</em><span>instalacija</span></div>
+    </div>
+  </section>
+
+  <!-- 10 · Tehnički -->
+  <section class="scene" data-t="11000">
+    <div class="rub"><span class="rub-no">09</span><span class="rub-tx">U učionici</span><span class="rub-line"></span></div>
+    <h1>Radi bez interneta. Podaci ostaju kod vas.</h1>
+    <p class="lead">Instalira se kao običan program, bez naloga i pretplate. Ništa se ne šalje na strane servere — sve je na vašem računaru, s rezervnom kopijom u jednom kliku.</p>
+    <ul class="bul">
+      <li><span class="tick">—</span> Windows instalacija, ikona na radnoj površini</li>
+      <li><span class="tick">—</span> Backup i vraćanje podataka</li>
+      <li><span class="tick">—</span> Za AI dovoljan besplatan ključ</li>
+    </ul>
+  </section>
+
+  <!-- 11 · Zaključak -->
+  <section class="scene" data-t="10000">
+    <div class="logo-wrap">
+      <div class="seal">✦</div>
+      <div class="big">Generator</div>
+      <div class="sub">nastavnih materijala</div>
+      <div class="tag">Papirologija za cijelu godinu — iz jednog unosa gradiva.<br>Napravljeno u učionici, za učionicu.</div>
+    </div>
+  </section>
+
+  <div id="bar"></div>
+  <div id="num">SCENA 01 / 11</div>
+  <div id="hint">RAZMAK · pauza &nbsp;|&nbsp; ← → · scene &nbsp;|&nbsp; F · cijeli ekran &nbsp;|&nbsp; R · ispočetka</div>
+  <div id="pause">PAUZIRANO</div>
+</div>
+
+<script>
+(function(){
+  var scenes = [].slice.call(document.querySelectorAll('.scene'));
+  var bar = document.getElementById('bar');
+  var num = document.getElementById('num');
+  var hint = document.getElementById('hint');
+  var pauseEl = document.getElementById('pause');
+  var i = 0, t0 = 0, raf = null, paused = false, elapsed = 0;
+
+  // Uvodna scena: obrasci se nabrajaju jedan po jedan
+  var obrasci = [
+    'Godišnji plan rada',
+    'Sedmični plan — za svaku sedmicu',
+    'Mjesečni plan — Obrazac 16-B-1',
+    'Dnevna priprema — za svaki čas',
+    'Pismena provjera + ključ',
+    'Inicijalna provjera + analiza',
+    'Prilagođeni program — Obrazac 15-A',
+    'Opservacija učenika',
+    'Izvještaj na kraju polugodišta'
+  ];
+  var pile = document.getElementById('pile');
+  obrasci.forEach(function(o, k){
+    var d = document.createElement('div');
+    d.textContent = o;
+    d.style.animationDelay = (0.25 + k * 0.24) + 's';
+    pile.appendChild(d);
+  });
+
+  function dur(){ return parseInt(scenes[i].getAttribute('data-t'), 10) || 9000; }
+
+  function show(n, resetTime){
+    scenes.forEach(function(s){ s.classList.remove('on'); });
+    i = (n + scenes.length) % scenes.length;
+    // ponovno pokretanje animacija
+    var s = scenes[i];
+    s.offsetWidth;
+    s.classList.add('on');
+    num.textContent = 'SCENA ' + String(i+1).padStart(2,'0') + ' / ' + String(scenes.length).padStart(2,'0');
+    if (resetTime !== false){ elapsed = 0; t0 = performance.now(); }
+  }
+
+  function tick(now){
+    if (!paused){
+      elapsed = now - t0;
+      var p = Math.min(elapsed / dur(), 1);
+      bar.style.width = (p * 100) + '%';
+      if (p >= 1){ show(i + 1); }
+    } else {
+      t0 = now - elapsed;
+    }
+    raf = requestAnimationFrame(tick);
+  }
+
+  document.addEventListener('keydown', function(e){
+    if (e.code === 'Space'){ e.preventDefault(); paused = !paused; pauseEl.classList.toggle('on', paused); }
+    else if (e.code === 'ArrowRight'){ show(i + 1); }
+    else if (e.code === 'ArrowLeft'){ show(i - 1); }
+    else if (e.key === 'r' || e.key === 'R'){ show(0); }
+    else if (e.key === 'f' || e.key === 'F'){
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+  });
+
+  // Sakrij uputu nakon 6 sekundi
+  setTimeout(function(){ hint.classList.add('hide'); }, 6000);
+
+  show(0);
+  raf = requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
